@@ -1,0 +1,29 @@
+---
+title: "PSYC6250_JAN27"
+author: "Thomas K. Valentine"
+date: "Spring 2015"
+output: html_document
+---
+
+Note: This document was created on Jan 27, but contains course materials from throughout Spring 2016 for PSYC 6250 with Nathan Carter.
+
+```{r}
+#Import Data
+BIG5 <- read.csv("BIG5.csv", header = TRUE)
+INTRO <- read.csv("INTRO.csv", header = TRUE)
+
+#Load CTT package
+library(CTT)
+
+#Descriptive statistics of Data Sets
+summary(BIG5)
+summary(INTRO)
+```
+
+
+
+#### Note: The command below is helpful for debugging, and was provided by Dr. Tyler Scott during the Fall 2015 semester of PADP 8120.
+
+```{r echo=FALSE}
+sessionInfo()
+```
