@@ -1,0 +1,133 @@
+---
+title: "Big 5 Assignment - Feb 10"
+author: "Thomas K. Valentine"
+date: "February 10, 2016"
+output: html_document
+---
+```{r}
+##READ IN DATA	
+INTRO<-read.csv("INTRO.csv")
+##CHECK DESCRIPTIVES
+summary(INTRO)
+##SELECT ITEMS TO BE ANALYZED
+INTRO<-INTRO[c(2:21)]	
+##CHECK TO BE SURE ALL IS WELL
+summary(INTRO)
+##CALL 'CTT' PACKAGE
+library(CTT)
+##SCORE TESTS
+testscores<-score(INTRO,output.scored=TRUE)	
+##CHECK SCORES
+testscores
+##GET ITEM ANALYSIS INFO
+str(reliability(INTRO,itemal=TRUE),vec.len=1000)
+##DELETE AN ITEM
+INTRO_r19<-INTRO[c(-19)]
+##COMPUTE RELIABILITY W/ DELETED ITEM
+str(reliability(INTRO_r19,itemal=TRUE),vec.len=1000)
+##ITEMPLOT
+cttICC(testscores$score,testscores$scored[,1])		
+
+##CALCULATE Z-SCORES
+zINTRO<-score.transform(testscores$score,mu.new=0,sd.new=1,normalize=FALSE) 
+##CREATE AN OBJECT TO BE GRAPHED
+Z<-zINTRO$new.scores
+##MAKE HISTOGRAM
+hist(Z,main="Standardized Test Scores",col="red",freq=FALSE)
+##OVERLAY THEORETICAL NORMAL DISTN.
+curve(dnorm(x,mean=mean(Z),sd=sd(Z)),add=TRUE,col="black")		    
+
+##READ IN THE DATA
+BIG5<-read.csv("BIG5.csv")
+##SELECT ITEMS TO BE ANALYZED
+ext<-BIG5[c(8:17)]
+neu<-BIG5[c(18:27)]
+agr<-BIG5[c(28:37)]
+con<-BIG5[c(38:47)]
+ope<-BIG5[c(48:57)]
+##WE WILL HAVE TO USE THE PSYCH PACKAGE TO RECODE
+library(psych)
+
+##Reverse Code Ext
+##-1 MEANS REVERSE CODE
+ext.keys<-c(1,-1,1,-1,1,-1,1,-1,1,-1)
+##USE THE KEY TO REVERSE CODE AND REPLACE EXT WITH THIS ONE
+ext<-reverse.code(ext.keys,ext,mini=0,maxi=5)
+
+##Reverse Code Neu
+##-1 MEANS REVERSE CODE
+neu.keys<-c(1,-1,1,-1,1,1,1,1,1,1)
+##USE THE KEY TO REVERSE CODE AND REPLACE EXT WITH THIS ONE
+neu<-reverse.code(neu.keys,neu,mini=0,maxi=5)
+
+##Reverse Code Agr
+##-1 MEANS REVERSE CODE
+agr.keys<-c(1,1,-1,1,-1,1,-1,1,1,1)
+##USE THE KEY TO REVERSE CODE AND REPLACE EXT WITH THIS ONE
+agr<-reverse.code(agr.keys,agr,mini=0,maxi=5)
+
+##Reverse Code Con
+##-1 MEANS REVERSE CODE
+con.keys<-c(1,-1,1,-1,1,-1,1,-1,1,1)
+##USE THE KEY TO REVERSE CODE AND REPLACE EXT WITH THIS ONE
+con<-reverse.code(con.keys,con,mini=0,maxi=5)
+
+##Reverse Code Ope
+##-1 MEANS REVERSE CODE
+ope.keys<-c(1,-1,1,-1,1,-1,1,1,1,1)
+##USE THE KEY TO REVERSE CODE AND REPLACE EXT WITH THIS ONE
+ope<-reverse.code(ope.keys,ope,mini=0,maxi=5)
+
+##CALL THE 'CTT' PACKAGE
+library(CTT)
+##SCORE THE MEASURES
+extscores<-score(ext,output.scored=TRUE)
+neuscores<-score(neu,output.scored=TRUE)
+agrscores<-score(agr,output.scored=TRUE)
+conscores<-score(con,output.scored=TRUE)
+opescores<-score(con,output.scored=TRUE)
+
+##ITEM ANALYSIS: Ext
+##GET ITEM ANALYSIS INFORMATION
+str(reliability(ext,itemal=TRUE),vec.len=1000)
+#Alpha before processing: .892
+##Item 8 if deleted has the highest correlation (.889) and has smallest biserial (.549). Item mean  = 1.62. Difficulty = .???. (1 - the item mean doesn't work. Numbers are above 1, not sure how to process) To go for maximum reliability, we would delete this item.
+
+##ITEM ANALYSIS: Neu
+##GET ITEM ANALYSIS INFORMATION
+str(reliability(neu,itemal=TRUE),vec.len=1000)
+#Alpha before processing: .869
+##Item 4 if deleted has the highest correlation (.875) and has smallest biserial (.365). Item mean  = 2.24. Difficulty = .???. (1 - the item mean doesn't work. Numbers are above 1, not sure how to process)  To go for maximum reliability, we would delete this item.
+# Item 2 and 5 (correlations = .863, biserials .515 and 521) should also be considered for deletion
+
+##ITEM ANALYSIS: Agr
+##GET ITEM ANALYSIS INFORMATION
+str(reliability(agr,itemal=TRUE),vec.len=1000)
+#Alpha before processing: .728
+##Item 1 if deleted has the highest correlation (.822) and has smallest biserial (-.438). Item mean  = 2.31. Difficulty = .???. (1 - the item mean doesn't work. Numbers are above 1, not sure how to process)  To go for maximum reliability, we would delete this item.
+#Item 3 (correlation .719, bis .579) would be our next to consider
+
+##ITEM ANALYSIS: Con
+##GET ITEM ANALYSIS INFORMATION
+str(reliability(con,itemal=TRUE),vec.len=1000)
+#Alpha before processing: .813
+##Item 2 if deleted has the highest correlation (.809) and has smallest biserial (.388). Item mean  = 3.98. Difficulty = .???. (1 - the item mean doesn't work. Numbers are above 1, not sure how to process)  To go for maximum reliability, we would delete this item.
+#Item 10 (corr .804, bis 4.36) would be our next to consider
+
+##ITEM ANALYSIS: Ope
+##GET ITEM ANALYSIS INFORMATION
+str(reliability(ope,itemal=TRUE),vec.len=1000)
+#Alpha before processing: .794
+##Item 9 if deleted has the highest correlation (.797) and has smallest biserial (.309). Item mean  = 3.98. Difficulty = .???. (1 - the item mean doesn't work. Numbers are above 1, not sure how to process)  To go for maximum reliability, we would delete this item.
+#Item 7 (corr .78, bis 4.64) should also be considered.
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+#### Note: The command below is helpful for debugging, and was provided by Dr. Tyler Scott during the Fall 2015 semester of PADP 8120.
+
+```{r echo=FALSE}
+sessionInfo()
+```
+

@@ -10,14 +10,14 @@ Note: This document was created on Jan 27, but contains course materials from th
 ##February 3, 2016
 ```{r}
 #Import Data
-BIG5 <- read.csv("BIG5.csv", header = TRUE)
+ffm <- read.csv("BIG5.csv", header = TRUE)
 INTRO <- read.csv("INTRO.csv", header = TRUE)
 
 #Load CTT package
 library(CTT)
 
 #Descriptive statistics of data sets
-summary(BIG5)
+summary(ffm)
 summary(INTRO)
 
 #Create data set without id data
@@ -51,6 +51,24 @@ cttICC(testscores$score, testscores$scored[,19])
 #What we are finding here is that how well you do with item 19 is having little to do with how you do with the rest of the items. We are going to delete it. If the item mean was .05 but the ones who got it correct had done so by chance. There is a very important detective aspect to this work. 
 cttICC(testscores$score, testscores$scored[,4])
 
+#Now we are going to analyze a personality scale that has already been reverse coded, using the ffm data set.Before we were looking at a test of understanding content in a class. In content analysis we are only talking about one thing at a time, so we should never analyze two different items that are in two different dimensions (we wouldn't expect correlation between items from openness and conscience for example).
+
+#Create data set for one dimension, extraverison
+ext <- ffm[c(8:17)]
+summary(ext)
+extscores <- score(ext, output.scored = TRUE)
+str(reliability(ext, itemal = TRUE), vec.len = 1000)
+
+#Use new data to look at openness
+library(foreign)
+ffm <-read.spss("FFM_EFA.sav", use.value.labels = FALSE)
+write.csv(ffm, "FFM.csv")
+ffm <- read.csv("FFM.csv")
+open <- ffm[c(3:5)]
+summary(open)
+openscores <- score(open, output.scored = TRUE)
+str(reliability(open, itemal = TRUE), vec.len = 1000)
+cttICC(openscores$score, openscores$scored[,2])
 ```
 
 
