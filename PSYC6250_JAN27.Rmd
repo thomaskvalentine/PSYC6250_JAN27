@@ -1,12 +1,13 @@
 ---
-title: "PSYC6250_JAN27"
+title: "PSYC 6250 Practice"
 author: "Thomas K. Valentine"
 date: "Spring 2015"
 output: html_document
 ---
 
-Note: This document was created on Jan 27, but contains course materials from throughout Spring 2016 for PSYC 6250 with Nathan Carter.
+Note: This document was created on Jan 27, but contains course materials from throughout Spring 2016. Completed for PSYC 6250 with Nathan Carter.
 
+##February 3, 2016
 ```{r}
 #Import Data
 BIG5 <- read.csv("BIG5.csv", header = TRUE)
@@ -15,10 +16,45 @@ INTRO <- read.csv("INTRO.csv", header = TRUE)
 #Load CTT package
 library(CTT)
 
-#Descriptive statistics of Data Sets
+#Descriptive statistics of data sets
 summary(BIG5)
 summary(INTRO)
+
+#Create data set without id data
+INTRO <- INTRO[c(2:21)]
+
+#Summary to confirm we have the right columns
+summary(INTRO)
+
+#First thing we do is score this, using the score command from the CTT package
+testscores <- score(INTRO, output.scored = TRUE)
+testscores
+
+#Next, we look at reliability information (Note, vec.len = vector link)
+str(reliability(INTRO, itemal = TRUE), vec.len = 1000)
+
+#Note: pBis is point biserial. No one uses it. Biserial gets used.
+# AlphaifDeleted is a proxy for the biserial correlation. It is the biserial with the item deleted. Proxy for the corrected item-to-total
+
+#Now, what we want to do is look at which item would give us the highest alpha if deleted. Item 19 if deleted has the highest correlation (.756) and has smallest biserial (.0636). Item mean  = .378. Difficulty = .622. (1 - the item mean) To go for maximum reliability, we are going to delete this item.
+INTRO_r19 <- INTRO[c(-19)]
+
+#Now we rerun the reliability information with our new object
+str(reliability(INTRO_r19, itemal = TRUE), vec.len = 1000)
+
+#We have to ask ourselves, we do we stop deleting items. That is a judgement call. Some say an increase in .05, some say an increase in .025. What it really comes down is how many items you have, how many items you need, and what type of improvement you get. In general, consider the .05 cut off. We need to consider the practical considerations, but if we get big bumps in coefficient alpha we are going to delete the item.
+
+#Now, we look at item characteristics. This displays the ICC for column 1
+cttICC(testscores$score, testscores$scored[,1])
+#Now we look at item 19
+cttICC(testscores$score, testscores$scored[,19])
+#What we are finding here is that how well you do with item 19 is having little to do with how you do with the rest of the items. We are going to delete it. If the item mean was .05 but the ones who got it correct had done so by chance. There is a very important detective aspect to this work. 
+cttICC(testscores$score, testscores$scored[,4])
+
 ```
+
+
+
 
 
 
